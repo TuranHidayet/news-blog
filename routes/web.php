@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
+use App\Models\CurrencyRate;
+use App\Http\Controllers\CurrencyRateController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,5 +26,14 @@ Route::post('/news', [NewsController::class, 'store'])->name('news.store');
 Route::get('news/{id}/edit', [NewsController::class, 'edit'])->name('news.edit');
 Route::put('news/{id}', [NewsController::class, 'update'])->name('news.update');
 Route::delete('news/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
+
+Route::get('/rates', function () {
+    return CurrencyRate::all();
+});
+
+
+Route::get('/currency-fetch', [\App\Http\Controllers\CurrencyController::class, 'fetch']);
+
+Route::get('/currency-rates', [CurrencyRateController::class, 'index']);
 
 require __DIR__.'/auth.php';
