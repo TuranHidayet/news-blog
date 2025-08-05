@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Models\CurrencyRate;
 use App\Http\Controllers\CurrencyRateController;
+use App\Jobs\DefaultJob;
+use App\Jobs\CommentImportJob;
+
+require __DIR__.'/auth.php';
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,4 +40,14 @@ Route::get('/currency-fetch', [\App\Http\Controllers\CurrencyController::class, 
 
 Route::get('/currency-rates', [CurrencyRateController::class, 'index']);
 
-require __DIR__.'/auth.php';
+Route::get('/test-default-job', function () {
+    DefaultJob::dispatch();
+    return "Default job dispatch edildi!";
+});
+
+Route::get('/import-comments', function () {
+    CommentImportJob::dispatch()->onQueue('comments_queue');
+    return 'CommentImportJob dispatch edildi!';
+});
+
+
