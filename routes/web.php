@@ -45,9 +45,10 @@ Route::get('/test-default-job', function () {
     return "Default job dispatch edildi!";
 });
 
-Route::get('/import-comments', function () {
-    CommentImportJob::dispatch()->onQueue('comments_queue');
-    return 'CommentImportJob dispatch edildi!';
+Route::get('/test-comment-import', function () {
+    $url = 'https://jsonplaceholder.typicode.com/comments';
+    CommentImportJob::dispatch($url)->onQueue('comments_queue');
+    return 'CommentImportJob URL ilə queue-ya göndərildi!';
 });
 
 

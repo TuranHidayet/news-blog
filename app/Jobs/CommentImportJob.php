@@ -5,22 +5,28 @@ namespace App\Jobs;
 use App\Models\Comment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class CommentImportJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $url; 
+
+    public function __construct($url)
+    {
+        $this->url = $url;
+    }
 
     public function handle()
     {
+        Log::info("CommentImportJob başladı. API URL: {$this->url}");
 
-
-        $response = Http::get('https://jsonplaceholder.typicode.com/comments');
+        $response = Http::get($this->url);
 
         if ($response->successful()) {
             $comments = $response->json();
@@ -37,7 +43,5 @@ class CommentImportJob implements ShouldQueue
                 );
             }
         }
-         Log::info('CommentImportJob başladı!');
-
     }
 }
