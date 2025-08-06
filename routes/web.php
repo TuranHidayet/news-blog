@@ -7,6 +7,7 @@ use App\Models\CurrencyRate;
 use App\Http\Controllers\CurrencyRateController;
 use App\Jobs\DefaultJob;
 use App\Jobs\CommentImportJob;
+use App\Http\Controllers\ExcelController;
 
 require __DIR__.'/auth.php';
 
@@ -49,6 +50,21 @@ Route::get('/test-comment-import', function () {
     $url = 'https://jsonplaceholder.typicode.com/comments';
     CommentImportJob::dispatch($url)->onQueue('comments_queue');
     return 'CommentImportJob URL ilə queue-ya göndərildi!';
+});
+
+Route::prefix('excel')->name('excel.')->group(function () {
+    
+    // Excel səhifəsi
+    Route::get('/', [ExcelController::class, 'index'])->name('index');
+    
+    // Products Export
+    Route::get('/products/export', [ExcelController::class, 'exportProducts'])->name('products.export');
+    
+    // Products Import
+    Route::post('/products/import', [ExcelController::class, 'importProducts'])->name('products.import');
+    
+    // Template Download
+    Route::get('/products/template', [ExcelController::class, 'downloadTemplate'])->name('products.template');
 });
 
 
